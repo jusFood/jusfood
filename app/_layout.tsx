@@ -14,6 +14,10 @@ import store from "@/app/store";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 
+// clerk
+import { ClerkProvider } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -34,14 +38,16 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Provider store={store}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </Provider>
+      <ClerkProvider tokenCache={tokenCache}>
+        <Provider store={store}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </Provider>
+      </ClerkProvider>
     </ThemeProvider>
   );
 }
